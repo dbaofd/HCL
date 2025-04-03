@@ -285,13 +285,13 @@ def vit_small(patch_size=16, pretrained=True, pretrain_weights="dino", **kwargs)
         valid_weights = ["dino", "leopart", "croc-coco", "croc-imagenet"]
         assert (pretrain_weights in valid_weights)
         if patch_size == 16 and pretrain_weights == "dino":
-            pretrained_weights_path = "pretrain/dino_deitsmall16_pretrain.pth"
+            pretrained_weights_path = "weights/pretrain/dino_deitsmall16_pretrain.pth"
             print("loading pretrained weights ", pretrained_weights_path)
             state_dict = torch.load(pretrained_weights_path, map_location="cpu")
             msg = model.load_state_dict(state_dict, strict=False)
             print('Pretrained weights found at {} and loaded with msg: {}'.format(pretrained_weights_path, msg))
         elif patch_size == 16 and pretrain_weights == "leopart":
-            pretrained_weights_path = "pretrain/leopart_vits16.ckpt"
+            pretrained_weights_path = "weights/pretrain/leopart_vits16.ckpt"
             print("loading pretrained weights ", pretrained_weights_path)
             state_dict = torch.load(pretrained_weights_path, map_location="cpu")
             for k in list(state_dict.keys()):
@@ -302,9 +302,9 @@ def vit_small(patch_size=16, pretrained=True, pretrain_weights="dino", **kwargs)
             print('Pretrained weights found at {} and loaded with msg: {}'.format(pretrained_weights_path, msg))
         elif patch_size == 16 and (pretrain_weights == "croc-coco" or pretrain_weights == "croc-imagenet"):
             if pretrain_weights == "croc-coco":
-                pretrained_weights_path = "pretrain/croc_coco+.pth"  # croc_imagenet1k.pth"
+                pretrained_weights_path = "weights/pretrain/croc_coco+.pth"  # croc_imagenet1k.pth"
             elif pretrain_weights =="croc-imagenet":
-                pretrained_weights_path = "pretrain/croc_imagenet1k.pth"
+                pretrained_weights_path = "weights/pretrain/croc_imagenet1k.pth"
             check_point = "student"
             print("loading pretrained weights ", pretrained_weights_path)
             state_dict = torch.load(pretrained_weights_path, map_location="cpu")[check_point]
@@ -316,7 +316,7 @@ def vit_small(patch_size=16, pretrained=True, pretrain_weights="dino", **kwargs)
             msg = model.load_state_dict(state_dict, strict=False)
             print('Pretrained weights found at {} and loaded with msg: {}'.format(pretrained_weights_path, msg))
         elif patch_size == 8:
-            pretrained_weights_path = "pretrain/dino_deitsmall8_pretrain.pth"
+            pretrained_weights_path = "weights/pretrain/dino_deitsmall8_pretrain.pth"
             print("loading pretrained weights ", pretrained_weights_path)
             state_dict = torch.load(pretrained_weights_path, map_location="cpu")
             msg = model.load_state_dict(state_dict, strict=False)
@@ -329,7 +329,7 @@ def vit_base(patch_size=16, pretrained=True, **kwargs):
         patch_size=patch_size, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4,
         qkv_bias=True, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     if pretrained:
-        pretrained_weights = "pretrain/dino_vitbase8_pretrain.pth"
+        pretrained_weights = "weights/pretrain/dino_vitbase8_pretrain.pth"
         #         checkpoint_key= "teacher"
         print("loading pretrained weights ", pretrained_weights)
         state_dict = torch.load(pretrained_weights, map_location="cpu")

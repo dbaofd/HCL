@@ -7,7 +7,7 @@ import warnings
 import faiss
 import numpy as np
 import build as build
-from utils.utils import perform_faiss_kmeans, broadcast_kmeans_seed, get_faiss_idx, adjust_learning_rate, concentration_estimation
+from utils.utils import perform_faiss_kmeans, broadcast_kmeans_seed, get_faiss_idx, adjust_learning_rate
 from utils.eval_utils import AverageMeter, ProgressMeter
 import torch
 import torch.backends.cudnn as cudnn
@@ -69,12 +69,6 @@ parser.add_argument("--cos", action="store_true", help="use cosine lr schedule")
 parser.add_argument('--arch', default='vit_small', type=str, choices=['vit_tiny', 'vit_small', 'vit_base'],
                     help="Name of architecture to train. For quick experiments with ViTs,we recommend using vit_tiny or vit_small.")
 
-# for pascal
-# k:2000, sample_percentage:0.3, replace_percentage 0.5, nce tem 0.07, train for 10 epochs, schedule [3,]
-# for coco
-# k:2000, sample_percentage:0.3, replace_percentage 0.5, nce tem 0.07, train for 10 epochs, schedule [5,]
-# for cityscapes
-# k:2000, sample_percentage:0.6, replace_percentage 0.5, nce tem 0.05, train for 10 epochs, schedule [8,12]
 def main():
     args = parser.parse_args()
     if args.seed is not None:
@@ -273,13 +267,7 @@ def main_worker(gpu, ngpus_per_node, args):
         faiss_idx_background.reset()
         kmeans_foreground = perform_faiss_kmeans(model.module.global_patch_embedding_bank_foreground, args.k_foreground, seed, faiss_idx_foreground)
         kmeans_background = perform_faiss_kmeans(model.module.global_patch_embedding_bank_background, args.k_background, seed, faiss_idx_background)
-        # kmeans, kmeans_idx = perform_faiss_kmeans_on_all_ranks(global_patch_embeddings, args, k, seed)
         print("finish kmeans")
-        # if epoch==args.start_epoch:
-        # foreground_con = concentration_estimation(faiss_idx_foreground, model.module.global_patch_embedding_bank_foreground)
-        # background_con = concentration_estimation(faiss_idx_background, model.module.global_patch_embedding_bank_background)
-        # print("estimation", foreground_con, background_con, "+++++++++++++++")
-        # model.module.update_nce(foreground_con, background_con)
 
         centroids_foreground = torch.tensor(
             faiss.vector_float_to_array(kmeans_foreground.centroids).reshape(args.k_foreground, args.outputdim)).cuda(
@@ -295,12 +283,10 @@ def main_worker(gpu, ngpus_per_node, args):
             if epoch in [0, 4, 9, 14, 19, 24, 29]:
                 online_seg_head_state_dict = model.module.online_seg_head.state_dict()
                 momentum_seg_head_state_dict = model.module.momentum_seg_head.state_dict()
-                #backbone_dict = model.module.vit_featurizer.state_dict()
                 save_checkpoint(# only save weights from seg head.
                     {
                         "epoch": epoch + 1,
                         "arch": "vit_small",
-                        #"backbone": backbone_dict,
                         "online_seg_head": online_seg_head_state_dict,
                         "momentum_seg_head": momentum_seg_head_state_dict,
                         "centroids_foreground":centroids_foreground,
@@ -328,26 +314,17 @@ def train(centroids_foreground,centroids_background, faiss_idx_foreground, faiss
     for i, (indice, image1, image2) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
-        # it = len(train_loader) * epoch + i  # global training iteration
-        # adjust_learning_rate(optimizer, learning_rate_schedule, it)
         if args.gpu is not None:
             image1 = image1.cuda(args.gpu, non_blocking=True)
             image2 = image2.cuda(args.gpu, non_blocking=True)
             indice = indice.cuda(args.gpu, non_blocking=True)
         # compute output
-        #image1 = train_loader.dataset.transform_eqv(indice, image1, mode='bilinear')
-        #image2 = train_loader.dataset.transform_eqv(indice, image2, mode='bilinear')
         positive_logits_foreground, logits_foreground, positive_logits_background,  logits_background, q_predictor, k= model(image1, image2, centroids_foreground,centroids_background, faiss_idx_foreground, faiss_idx_background)
-        #, q_predictor, k
-        #print("loss++++++++",positive_logits_foreground.shape, logits_foreground.shape,positive_logits_background.shape, logits_background.shape)
         # formulate loss
         loss_foreground = -torch.log(torch.div(positive_logits_foreground, logits_foreground)).mean()  # N
         loss_background = -torch.log(torch.div(positive_logits_background, logits_background)).mean()  # N
-        #loss_selected_foreground = -torch.log(torch.div(positive_logits_selected_foreground, logits_selected_foreground)).mean()  # N
-
         loss_mse = mse_loss(q_predictor, k)
-        #loss_mes2 = mse_loss(q_foreground, target_foreground)
-        loss = (loss_foreground+loss_background) * 0.5 + loss_mse*0.5# + loss_mes2*0.5#loss_foreground
+        loss = (loss_foreground+loss_background) * 0.5 + loss_mse*0.5
         losses.update(loss.item(), 1)
 
         # compute gradient and do SGD step

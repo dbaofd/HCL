@@ -362,7 +362,7 @@ def vit_small(patch_size=16, pretrained=True, **kwargs):
             # print("loading pretrained weights ", pretrained_weights_path)
             # msg = model.load_state_dict(state_dict, strict=False)
             # print(msg, "okokokokokokok") # when finetune extra pe layers, we need to save the whole backbone weights and load it here.
-            pretrained_weights_path = "pretrain/dino_deitsmall16_pretrain.pth"
+            pretrained_weights_path = "weights/pretrain/dino_deitsmall16_pretrain.pth"
             print("loading pretrained weights ", pretrained_weights_path)
             state_dict = torch.load(pretrained_weights_path, map_location="cpu")
             # use pi_resize proposed in FlexiViT to resize the original patch embedding weights to new scale.
@@ -390,7 +390,7 @@ def vit_small(patch_size=16, pretrained=True, **kwargs):
             qkv_bias=True, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 
         if pretrained:
-            pretrained_weights_path = "pretrain/dino_deitsmall8_pretrain.pth"
+            pretrained_weights_path = "weights/pretrain/dino_deitsmall8_pretrain.pth"
             print("loading pretrained weights ", pretrained_weights_path)
             state_dict = torch.load(pretrained_weights_path, map_location="cpu")
             # use pi_resize proposed in FlexiViT to resize the original patch embedding weights to new scale.

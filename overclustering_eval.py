@@ -20,7 +20,7 @@ from data import eval_transforms
 from utils.eval_utils import PredsmIoU, cluster, normalize_and_transform, batched_crf
 from data.data_module import EvalPascal, EvalCoco
 import vit.vision_transformer as vits
-
+model_weights_root = "weights/seghead_weights/"
 eval_config = {
     "hcl_p16_overclustering_pascal":{
         "eval_model_name": "hcl",
@@ -31,7 +31,7 @@ eval_config = {
         "pca_reduce_dim":100,
         "num_repeat_clustering":5,
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_pascal_p16.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_pascal_p16.pth.tar",
     },
 
     "hcl_p8_overclustering_pascal":{
@@ -43,7 +43,7 @@ eval_config = {
         "pca_reduce_dim":100,
         "num_repeat_clustering":5,
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_pascal_p8.pth.tar"
+        "model_weights_path":model_weights_root+"hcl_pascal_p8.pth.tar"
     },
 
     "hcl_p16_overclustering_coco":{
@@ -55,7 +55,7 @@ eval_config = {
         "pca_reduce_dim":100,
         "num_repeat_clustering":5,
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_coco_p16.pth.tar"
+        "model_weights_path":model_weights_root+"hcl_coco_p16.pth.tar"
     },
     "hcl_p8_overclustering_coco":{
         "eval_model_name": "hcl",
@@ -66,7 +66,7 @@ eval_config = {
         "pca_reduce_dim":100,
         "num_repeat_clustering":5,
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_coco_p8.pth.tar"
+        "model_weights_path":model_weights_root+"hcl_coco_p8.pth.tar"
     },
 }
 selected_config = eval_config["hcl_p16_overclustering_pascal"]
@@ -213,7 +213,7 @@ def main_worker(gpu, ngpus_per_node, args):
         )
     # create model
     print("=> creating model vit small")
-    if args.model_name == "mogoseg":
+    if args.model_name == "hcl":
         model = build.HCLEval(
             vit_arch=args.arch,
             pretrained_path=args.pretrained,
@@ -288,7 +288,7 @@ def main_worker(gpu, ngpus_per_node, args):
         val_dataset = EvalCoco(root_path="/workspace/coco_2017/", split="val", transform=val_transforms,
                                coarse_labels=True, data_set=coco_data_set, subset="iic_subset_val")#iic_subset_val
     elif evaluate_data == "pascal":
-        val_dataset = EvalPascal(root_path="/workspace/VOCdevkit/VOC2012/", split="val", transform=val_transforms)
+        val_dataset = EvalPascal(root_path="E:/Projects/ssl/Dataset/VOCdevkit/VOC2012/", split="val", transform=val_transforms)
 
     if args.distributed:
         val_sampler = torch.utils.data.distributed.DistributedSampler(val_dataset)

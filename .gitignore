@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Model weights
+weights/linear_classifier_weights/*
+weights/pretrain/*
+weights/seghead_weights/*

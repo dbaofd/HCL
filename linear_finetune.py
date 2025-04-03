@@ -19,8 +19,7 @@ from utils.eval_utils import SemsegMeter, AverageMeter, ProgressMeter, ClusterLo
 from utils.utils import adjust_learning_rate
 from data.data_module import EvalPascal, EvalCoco
 import vit.vision_transformer as vits
-
-
+model_weights_root = "weights/seghead_weights/"
 finetune_config = {
     "hcl_p16_linear_finetune_pascal":{
         "finetune_model_name": "hcl",
@@ -29,7 +28,7 @@ finetune_config = {
         "finetune_epochs":10,
         "finetune_data":"pascal",
         "model_check_point":"online_seg_head",
-        "model_weights_path": "seghead_weights/hcl_pascal_p16.pth.tar",
+        "model_weights_path": model_weights_root+"hcl_pascal_p16.pth.tar",
     },
 
     "hcl_p8_linear_finetune_pascal":{
@@ -39,7 +38,7 @@ finetune_config = {
         "finetune_epochs":10,
         "finetune_data":"pascal",
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_pascal_p8.pth.tar"
+        "model_weights_path":model_weights_root+"hcl_pascal_p8.pth.tar"
     },
 
     "hcl_p16_linear_finetune_coco":{
@@ -49,7 +48,7 @@ finetune_config = {
         "finetune_epochs":10,
         "finetune_data":"coco",
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_coco_p16.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_coco_p16.pth.tar",
     },
     "hcl_p8_linear_finetune_coco":{
         "finetune_model_name": "hcl",
@@ -58,7 +57,7 @@ finetune_config = {
         "finetune_epochs":10,
         "finetune_data":"coco",
         "model_check_point":"online_seg_head",
-        "model_weights_path":"seghead_weights/hcl_coco_p8.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_coco_p8.pth.tar",
     },
 }
 

@@ -18,39 +18,40 @@ from data import eval_transforms
 from utils.eval_utils import SemsegMeter, AverageMeter, ProgressMeter, batched_crf,UnsupervisedMetrics, get_single_metric, time_log, get_linear_weights
 from data.data_module import EvalPascal, EvalCoco
 import vit.vision_transformer as vits
-
+model_weights_root = "weights/seghead_weights/"
+linear_weights_root = "weights/linear_classifier_weights/"
 eval_config = {
     "hcl_p16_eval_pascal":{
         "eval_model_name": "hcl",
         "vit_patch_size":16,
         "evaluate_data":"pascal",
         "using_crf": True,
-        "model_weights_path":"seghead_weights/hcl_pascal_p16.pth.tar",
-        "linear_weights_path":"linear_classifier_weights/linear_classifier_pascal_p16.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_pascal_p16.pth.tar",
+        "linear_weights_path":linear_weights_root+"linear_classifier_pascal_p16.pth.tar",
     },
     "hcl_p8_eval_pascal":{
         "eval_model_name": "hcl",
         "vit_patch_size":8,
         "evaluate_data":"pascal",
         "using_crf": True,
-        "model_weights_path":"seghead_weights/hcl_pascal_p8.pth.tar",
-        "linear_weights_path":"linear_classifier_weights/linear_classifier_pascal_p8.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_pascal_p8.pth.tar",
+        "linear_weights_path":linear_weights_root+"linear_classifier_pascal_p8.pth.tar",
     },
     "hcl_p16_eval_coco":{
         "eval_model_name": "hcl",
         "vit_patch_size":16,
         "evaluate_data":"coco",
         "using_crf": True,
-        "model_weights_path":"seghead_weights/hcl_coco_p16.pth.tar",
-        "linear_weights_path":"linear_classifier_weights/linear_classifier_coco_p16.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_coco_p16.pth.tar",
+        "linear_weights_path":linear_weights_root+"linear_classifier_coco_p16.pth.tar",
     },
     "hcl_p8_eval_coco":{
         "eval_model_name": "hcl",
         "vit_patch_size":8,
         "evaluate_data":"coco",
         "using_crf": True,
-        "model_weights_path":"seghead_weights/hcl_coco_p8.pth.tar",
-        "linear_weights_path":"linear_classifier_weights/linear_classifier_coco_p8.pth.tar",
+        "model_weights_path":model_weights_root+"hcl_coco_p8.pth.tar",
+        "linear_weights_path":linear_weights_root+"linear_classifier_coco_p8.pth.tar",
     },
 
 }
@@ -61,7 +62,7 @@ assert eval_model_name in ["hcl"]
 model_weights_path = selected_config["model_weights_path"]
 linear_weights_path = selected_config["linear_weights_path"]
 vit_patch_size = selected_config["vit_patch_size"]
-model_check_point = "online_seg_head"#"momentum_seg_head"#"online_seg_head"
+model_check_point = "online_seg_head"
 evaluate_data = selected_config["evaluate_data"]  # switch dataset here
 coco_data_set = "full"
 using_crf = selected_config["using_crf"]
@@ -332,11 +333,12 @@ def validate(val_loader, model, linear_classifier, criterion, args):
             linear_output = nn.functional.interpolate(linear_output, size=(images.shape[2], images.shape[3]),
                                                 mode='bilinear',align_corners=False)
             loss = criterion(linear_output, targets)
-            # linear_output = linear_output.argmax(1).cuda()
             #apply crf
             if using_crf:
                 linear_output = torch.log_softmax(linear_output, dim=1)
                 linear_output = batched_crf(images, linear_output).argmax(1).cuda()
+            else:
+                linear_output = linear_output.argmax(1).cuda()
             # measure accuracy and record loss
             losses.update(loss.item(), images.size(0))
             linear_semseg_meter.update(linear_output, targets)

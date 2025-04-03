@@ -395,7 +395,7 @@ class UnsupervisedMetrics(Metric):
         return {k: 100 * v for k, v in metric_dict.items()}
 
 def get_linear_weights(linear_pretrained_path):
-    if os.path.isfile(linear_pretrained_path) and os.path.isfile(cluster_pretrained_path):
+    if os.path.isfile(linear_pretrained_path):
         linear_state_dict = torch.load(linear_pretrained_path, map_location="cpu")["linear_classifier"]
         print("loading weights from, ", linear_pretrained_path)
         for k in list(linear_state_dict.keys()):
