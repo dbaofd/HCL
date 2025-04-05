@@ -11,9 +11,9 @@
    * [Installation](#installation)
    * [Training](#training)
    * [Evaluation](#evaluation)
-   * [Understanding HCL](#about-hcl)
-      * [PM-ViT](#eigenvectors)
-      * [HCL Architecture](#eagle-architecture)
+   * [Understanding HCL](#understanding-hcl)
+      * [PM-ViT](#pm-vit)
+      * [HCL Architecture](#hcl-architecture)
       * [Evaluation Results](#evaluation-results)
       * [Learned Object Component Visualization](#learned-object-component-visualization)
 <!--te-->
