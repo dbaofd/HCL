@@ -8,10 +8,10 @@
 
 ## :book: Contents
 <!--ts-->
-   * [Installation](#installation)
-   * [Checkpoints](#checkpoints)
-   * [Training](#training)
-   * [Evaluation](#evaluation)
+   * [Installation](#zap-installation)
+   * [Checkpoints](#bread-checkpoints)
+   * [Training](#running-training)
+   * [Evaluation](#koala-evaluation)
       * [Linear classifier evaluation](#linear-classifier-evaluation)
       * [Overclustering_evaluation](#overclustering-evaluation)
    * [Understanding HCL](#understanding-hcl)
