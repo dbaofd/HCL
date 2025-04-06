@@ -86,13 +86,13 @@ Then please run:
 python main_mogoseg_no_sep.py --epochs 10 --batch-size 64 --dist-url 'tcp://0.0.0.0:10001' --multiprocessing-distributed --world-size 1 --rank 0
 ```
 ## :koala: Evaluation
-### Linear classifier evaluation
+### Linear Classifier Evaluation
 To evaluate linear classifier, go to "linear_eval.py", select a configuration from "eval_config", and then modify "selected_config". In the end, please run:
 ```shell script
 python linear_eval.py --batch-size 16 --gpu 0
 ```
 
-### Overclustering evaluation
+### Overclustering Evaluation
 To evaluate linear classifier, go to "overclustering_eval.py", select a configuration from "eval_config", and then modify "selected_config". In the end, please run:
 ```shell script
 python overclustering_eval.py --batch-size 16 --gpu 0
