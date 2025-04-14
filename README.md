@@ -83,7 +83,7 @@ To train HCL, go to main_hcl.py, change the corresponding hyperparameters.
 Then please run:
 
 ```shell script
-python main_mogoseg_no_sep.py --epochs 10 --batch-size 64 --dist-url 'tcp://0.0.0.0:10001' --multiprocessing-distributed --world-size 1 --rank 0
+python main_hcl.py --epochs 10 --batch-size 64 --dist-url 'tcp://0.0.0.0:10001' --multiprocessing-distributed --world-size 1 --rank 0
 ```
 ## :koala: Evaluation
 ### Linear Classifier Evaluation
