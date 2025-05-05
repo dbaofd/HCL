@@ -68,7 +68,8 @@ parser.add_argument("--nce-tem", default=0.07, type=float, help="nce softmax tem
 parser.add_argument("--cos", action="store_true", help="use cosine lr schedule")
 parser.add_argument('--arch', default='vit_small', type=str, choices=['vit_tiny', 'vit_small', 'vit_base'],
                     help="Name of architecture to train. For quick experiments with ViTs,we recommend using vit_tiny or vit_small.")
-
+coco_root = "/workspace/coco_2017/"
+pascal_root = "/workspace/VOCdevkit/VOC2012/"
 def main():
     args = parser.parse_args()
     if args.seed is not None:
@@ -221,19 +222,13 @@ def main_worker(gpu, ngpus_per_node, args):
     inv_list = ['blur', 'grey', 'brightness', 'contrast', 'saturation', 'hue']
     eqv_list = ['h_flip', 'v_flip', 'random_crop']
     if args.dataset == "pascal":
-        root_path = "/workspace/VOCdevkit/VOC2012/"
+        root_path = pascal_root
         split = "train_aug"
     elif args.dataset == "coco" or args.dataset == "coco_10k" or args.dataset == "coco_iic_subset_train":
-        root_path = "/workspace/coco_2017/"
+        root_path = coco_root
         split = "train"
-    elif args.dataset == "imagenet_100":
-        root_path = "/workspace/imagenet_100/"
-        split = "train"
-    elif args.dataset == "cityscapes":
-        root_path = "/workspace/cityscapes/"
-        split = "train_extra"
     elif args.dataset == "coco10k&pascal":
-        root_path = ["/workspace/coco_2017/", "/workspace/VOCdevkit/VOC2012/"]
+        root_path = [coco_root, pascal_root]
         split = ["train", "train_aug"]
 
     train_dataset = TrainDataset(args.dataset, root_path, split, inv_list, eqv_list,

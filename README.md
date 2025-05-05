@@ -4,11 +4,14 @@
 [Gervase Tuxworth](https://scholar.google.com/citations?user=gKB12I4AAAAJ&hl=en),
 [Jue Zhang](https://scholar.google.com/citations?user=K5sULxUAAAAJ&hl=en&oi=ao),
 [Yongsheng Gao](https://scholar.google.com/citations?user=IqazXu4AAAAJ&hl=en)
+
+[[Paper]](https://www.sciencedirect.com/science/article/pii/S0031320325003735/pdfft?md5=e66df299a16c22511c4226eb0f984d76&pid=1-s2.0-S0031320325003735-main.pdf)
 ![profile](/imgs/Figure_1.png)
 
 ## :book: Contents
 <!--ts-->
-   * [Installation](#zap-installation)
+   * [Requirements](#zap-requirements)
+   * [Datasets](#dog-datasets)
    * [Checkpoints](#bread-checkpoints)
    * [Training](#running-training)
    * [Evaluation](#koala-evaluation)
@@ -18,10 +21,48 @@
       * [PM-ViT](#pm-vit)
       * [HCL Architecture](#hcl-architecture)
       * [Evaluation Results](#evaluation-results)
+      * [Unsupervised Foreground Extraction](#unsupervised-foreground-extraction)
       * [Learned Object Component Visualization](#learned-object-component-visualization)
+   * [Citation](#citation)
 <!--te-->
 
-## :zap: Installation
+## :zap: Requirements
+Install the following packages.
+```commandline
+- python >= 3.10
+- pytorch >=2.0
+- faiss-gpu >=1.7.4
+- torchvision >=0.15.2
+- torchmetrics >=1.4.0
+- opencv >= 4.6.0
+- pydensecrf = 1.0rc3
+- scikit-learn >=1.1.3
+- scikit-image >= 0.21.0
+- einops >= 0.3.2
+```
+
+## :dog: Datasets
+Please download the data and follow the structure below. 
+### COCO-Stuff
+
+### Pascal VOC
+```
+dataset root.
+└───SegmentationClass
+│   │   *.png
+│   │   ...
+└───SegmentationClassAug # contains segmentation masks from trainaug extension 
+│   │   *.png
+│   │   ...
+└───JPEGImages
+│   │   *.jpg
+│   │   ...
+└───ImageSets
+|   └───Segmentation
+│       │   train.txt
+│       │   trainaug.txt
+│       │   val.txt
+```
 
 ## :bread: Checkpoints
 We release the weights on trained HCL. The backbone of HCL is PM-ViT, which is fixed during the model training.
@@ -116,6 +157,11 @@ contrastive loss based on MoGoClustering to ensure that the learned dense repres
 We evaluate the HCL on the PVOC and COCO-Stuff datasets.
 ![arch](/imgs/Figure_4.png)
 
+### Unsupervised Foreground Extraction
+We compare the unsupervised foreground extraction results (in green) of HCL with DINO cls token attention maps (in red). 
+![arch](/imgs/fg.png)
+
+
 ### Learned Object Component Visualization
 Object component representation visualization on the PVOC dataset using PM-ViT-S/16. The locations with a cross on the image are the query tokens, e.g., there is a cross on
 the bus wheel in the top left image. The query token is assigned a cluster ID from Cfg or Cbg,
@@ -125,3 +171,16 @@ included: 1) left 1: bus wheel; 2) left 2: car glass; 3) left 3: car wheel; 4) l
 face; 5) right 1: human mouth and jaw; 6) right 2: human hand; 7) right 3: cat ear; 8) right
 4: dog nose and mouth.
 ![arch](/imgs/Figure_6.png)
+
+## Citation
+If you believe this project is useful, please consider starring or citing, cheers.
+```commandline
+@article{bao2025hierarchical,
+  title={Hierarchical Context Learning of object components for unsupervised semantic segmentation},
+  author={Bao, Dong and Zhou, Jun and Tuxworth, Gervase and Zhang, Jue and Gao, Yongsheng},
+  journal={Pattern Recognition},
+  pages={111713},
+  year={2025},
+  publisher={Elsevier}
+}
+```

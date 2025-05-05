@@ -20,6 +20,8 @@ from utils.utils import adjust_learning_rate
 from data.data_module import EvalPascal, EvalCoco
 import vit.vision_transformer as vits
 model_weights_root = "weights/seghead_weights/"
+coco_root = "/workspace/coco_2017/"
+pascal_root = "/workspace/VOCdevkit/VOC2012/"
 finetune_config = {
     "hcl_p16_linear_finetune_pascal":{
         "finetune_model_name": "hcl",
@@ -321,16 +323,16 @@ def main_worker(gpu, ngpus_per_node, args):
             eval_transforms.Normalize(mean=mean, std=std)])
 
     if finetune_data == "coco":
-        train_dataset = EvalCoco(root_path="/workspace/coco_2017/", split="train",
+        train_dataset = EvalCoco(root_path=coco_root, split="train",
                                  transform=train_transforms, coarse_labels=True,
                                  data_set=coco_data_set, subset="iic_subset_train")#iic_subset_train, cocostuff10k
-        val_dataset = EvalCoco(root_path="/workspace/coco_2017/", split="val",
+        val_dataset = EvalCoco(root_path=coco_root, split="val",
                                transform=val_transforms, coarse_labels=True,
                                data_set=coco_data_set, subset="iic_subset_val")#, subset="iic_subset_val"
     elif finetune_data == "pascal":
-        train_dataset = EvalPascal(root_path="/workspace/VOCdevkit/VOC2012/", split="train_aug",
+        train_dataset = EvalPascal(root_path=pascal_root, split="train_aug",
                                    transform=train_transforms)
-        val_dataset = EvalPascal(root_path="/workspace/VOCdevkit/VOC2012/", split="val", transform=val_transforms)
+        val_dataset = EvalPascal(root_path=pascal_root, split="val", transform=val_transforms)
 
     if args.distributed:
         train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)

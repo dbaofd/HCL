@@ -20,6 +20,8 @@ from data.data_module import EvalPascal, EvalCoco
 import vit.vision_transformer as vits
 model_weights_root = "weights/seghead_weights/"
 linear_weights_root = "weights/linear_classifier_weights/"
+coco_root = "/workspace/coco_2017/"
+pascal_root = "/workspace/VOCdevkit/VOC2012/"
 eval_config = {
     "hcl_p16_eval_pascal":{
         "eval_model_name": "hcl",
@@ -281,10 +283,10 @@ def main_worker(gpu, ngpus_per_node, args):
             eval_transforms.Normalize(mean=mean, std=std)])
 
     if evaluate_data == "coco":
-        val_dataset = EvalCoco(root_path="/workspace/coco_2017/", split="val",
+        val_dataset = EvalCoco(root_path=coco_root, split="val",
                                transform=val_transforms, coarse_labels=True, data_set=coco_data_set, subset="iic_subset_val")
     elif evaluate_data == "pascal":#root: /workspace/VOCdevkit/VOC2012/
-        val_dataset = EvalPascal(root_path="E:/Projects/ssl/Dataset/VOCdevkit/VOC2012/", split="val", transform=val_transforms)
+        val_dataset = EvalPascal(root_path=pascal_root, split="val", transform=val_transforms)
     if args.distributed:
         val_sampler = torch.utils.data.distributed.DistributedSampler(val_dataset)
     else:
