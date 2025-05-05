@@ -50,10 +50,10 @@ Please download the data and follow the structure below.
 dataset root.
 └───stuffthingmaps_trainval2017
 │   └───train2017
-│       │   *.jpg
+│       │   *.png
 │       │   ...
 │   └───val2017
-│       │   *.jpg
+│       │   *.png
 │       │   ...
 └───train2017
 │   │   *.jpg
