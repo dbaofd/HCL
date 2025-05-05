@@ -12,6 +12,8 @@
 <!--ts-->
    * [Requirements](#zap-requirements)
    * [Datasets](#dog-datasets)
+      * [COCO-Stuff](#coco-stuff)
+      * [Pascal VOC](#pascal-voc)
    * [Checkpoints](#bread-checkpoints)
    * [Training](#running-training)
    * [Evaluation](#koala-evaluation)
@@ -30,13 +32,13 @@
 Install the following packages.
 ```commandline
 - python >= 3.10
-- pytorch >=2.0
-- faiss-gpu >=1.7.4
-- torchvision >=0.15.2
-- torchmetrics >=1.4.0
+- pytorch >= 2.0
+- faiss-gpu >= 1.7.4
+- torchvision >= 0.15.2
+- torchmetrics >= 1.4.0
 - opencv >= 4.6.0
 - pydensecrf = 1.0rc3
-- scikit-learn >=1.1.3
+- scikit-learn >= 1.1.3
 - scikit-image >= 0.21.0
 - einops >= 0.3.2
 ```
@@ -44,6 +46,25 @@ Install the following packages.
 ## :dog: Datasets
 Please download the data and follow the structure below. 
 ### COCO-Stuff
+```
+dataset root.
+└───stuffthingmaps_trainval2017
+│   └───train2017
+│       │   *.jpg
+│       │   ...
+│   └───val2017
+│       │   *.jpg
+│       │   ...
+└───train2017
+│   │   *.jpg
+│   │   ...
+└───val2017
+│   │   *.jpg
+│   │   ...
+└───Coco164kFull_Stuff_Coarse.txt
+└───Coco164kFull_Stuff_Coarse_7.txt
+└───cocostuff10k.txt
+```
 
 ### Pascal VOC
 ```
