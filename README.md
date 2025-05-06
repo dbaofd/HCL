@@ -6,6 +6,12 @@
 [Yongsheng Gao](https://scholar.google.com/citations?user=IqazXu4AAAAJ&hl=en)
 
 [[Paper]](https://www.sciencedirect.com/science/article/pii/S0031320325003735/pdfft?md5=e66df299a16c22511c4226eb0f984d76&pid=1-s2.0-S0031320325003735-main.pdf)
+
+[![PWC](https://img.shields.io/badge/State_of_the_art-Unsupervised_Semantic_Segmentation_on_COCO--Stuff_27_(Linear_Classifier_[mIoU]_metric)-0EA7A8?logo=paperswithcode)](https://paperswithcode.com/paper/hierarchical-context-learning-of-object)
+[![PWC](https://img.shields.io/badge/State_of_the_art-Unsupervised_Semantic_Segmentation_on_COCO--Stuff_27_(Linear_Classifier_[Accuracy]_metric)-0EA7A8?logo=paperswithcode)](https://paperswithcode.com/paper/hierarchical-context-learning-of-object)
+[![PWC](https://img.shields.io/badge/State_of_the_art-Unsupervised_Semantic_Segmentation_on_PASCAL_VOC_2012_val_(Linear_Classifier_[mIoU]_metric)-0EA7A8?logo=paperswithcode)](https://paperswithcode.com/paper/hierarchical-context-learning-of-object)
+
+
 ![profile](/imgs/Figure_1.png)
 
 ## :book: Contents
