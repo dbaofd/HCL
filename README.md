@@ -161,14 +161,14 @@ python linear_eval.py --batch-size 16 --gpu 0
 ```
 
 ### Overclustering Evaluation
-To evaluate linear classifier, go to "overclustering_eval.py", select a configuration from "eval_config", and then modify "selected_config". In the end, please run:
+To evaluate overclustering performance, go to "overclustering_eval.py", select a configuration from "eval_config", and then modify "selected_config". In the end, please run:
 ```shell script
 python overclustering_eval.py --batch-size 16 --gpu 0
 ```
 
 ## Understanding HCL
 ### PM-ViT
-Parallel Multilevel Vision Transformer (PM-ViT), a specially designed backbone that captures multi-level object granularities and aggregates hierarchical contextual information into unified object component tokens.
+Parallel Multi-level Vision Transformer (PM-ViT), a specially designed backbone that captures multi-level object granularities and aggregates hierarchical contextual information into unified object component tokens.
 ![pm-vit](/imgs/Figure_3.png)
 
 ### HCL Architecture
